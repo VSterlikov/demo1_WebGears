@@ -1,0 +1,68 @@
+<html>
+	<head>
+		<title>My first Three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.min.js"></script>
+		<script src="js/dat.gui.min.js"></script>
+		<script>
+		var scene, camera, render, cube;
+		var direction = true;
+		
+		init();
+		animate();
+		
+		function init()
+		{
+			container = document.createElement('div');
+			document.body.appendChild(container);
+			
+			scene = new THREE.Scene();
+			camera = new THREE.PerspectiveCamera(65,window.innerWidth/window.innerHeight,0.1,2000);
+			camera.position.z = 600;
+			
+			var geometry = new THREE.BoxGeometry( 300, 300, 300 );
+			var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+			cube = new THREE.Mesh( geometry, material );
+			
+			cube.rotation.y = Math.random() * 2 * Math.PI;
+			
+			scene.add( cube );
+			
+			render = new THREE.WebGLRenderer();
+			render.setSize(window.innerWidth,window.innerHeight);
+			
+			initGUI();
+			container.appendChild(render.domElement);
+			render.render(scene,camera);
+			
+		
+		}
+		
+		function animate()
+		{
+			requestAnimationFrame( animate );
+			direction ? cube.rotation.y += 0.01 : cube.rotation.y -= 0.01;
+			render.render( scene, camera );
+		}
+		
+		function initGUI() 
+		{
+			
+			var parameters = 
+			{
+				changeDir: function() { direction = !direction; }
+			};
+
+			var gui = new dat.GUI();
+			gui.add( parameters, 'changeDir' ).name("Change Direction");
+
+		}
+		
+		</script>
+	</body>
+</html>
